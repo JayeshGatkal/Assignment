@@ -1,0 +1,127 @@
+﻿@model IEnumerable<EMP.BusinessEntity.Employee>
+@{
+    ViewBag.Title = "Employee Page";
+}
+
+
+<script>
+    $(function () {
+        $('#employees').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "pageLength": 10
+        });
+    });
+</script>
+
+@*<div class="row">
+    <div class="col-md-12">*@
+            <div class="box-tools">
+                @*@Html.ActionLink("Create New", "InsertUpdate", null, new { @class = "btn btn-primary" })*@
+                <button type="button" class="btn btn-primary" onClick="InsertUpdate(0);">Create New Employee</button>
+            </div>
+        <table id="employees" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LastName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Age)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.MaritalStatusId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Salary)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Location)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DepartmentId)
+                    </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LastName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Age)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MaritalStatus.Status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Salary)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Location)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Department.Name)
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-success btn-xs" onClick="InsertUpdate(@item.Id);">Edit</button>
+
+                            @Ajax.ActionLink("Delete", "Delete", "Home", new { id = item.Id },
+                              new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "GET",
+                              OnBegin = "return confirm('Are you sure you want delete this record?');", OnSuccess = "BindGridView()" })
+                        </td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    @*</div>
+</div>*@
+
+@section scripts
+{
+    <script type="text/javascript">
+        function InsertUpdate(Id) {
+            $('#myModalGood').modal({ backdrop: 'static', keyboard: false });
+            var id = parseInt(Id);
+            var url = '/Home/LoadInsertUpdate'
+            $("#divShowEmployee").load(url, { Id: id }, function () {
+
+
+            });
+        }
+    </script>
+}
+
+<div class="modal fade" id="myModalGood" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" style="width:85% !important" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="balcoModalTitle">Employee Management</h4>
+            </div>
+            <div id="divShowEmployee" class="modal-body">
+
+            </div>
+            <div class="modal-footer">
+                <button id="btnModalClose" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
