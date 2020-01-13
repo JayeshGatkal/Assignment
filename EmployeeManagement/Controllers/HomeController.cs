@@ -1,9 +1,11 @@
 ﻿using EMP.BusinessEntity;
 using EMP.BusinessUtil;
+using System;
 using System.Web.Mvc;
 
 namespace EmployeeManagement.Controllers
 {
+    [HandleError]
     public class HomeController : Controller
     {
         EmployeeUtil empUtil = null;
@@ -25,7 +27,7 @@ namespace EmployeeManagement.Controllers
             ViewBag.Departments = deptList;
             ViewBag.Status = statusList;
         }
-
+        
         public ActionResult Index()
         {
             var list = empUtil.GetListOfEmployee();
