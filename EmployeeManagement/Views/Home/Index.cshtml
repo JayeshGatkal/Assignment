@@ -3,27 +3,11 @@
     ViewBag.Title = "Employee Page";
 }
 
-
-<script>
-    $(function () {
-        $('#employees').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "pageLength": 10
-        });
-    });
-</script>
-
-@*<div class="row">
-    <div class="col-md-12">*@
-            <div class="box-tools">
-                @*@Html.ActionLink("Create New", "InsertUpdate", null, new { @class = "btn btn-primary" })*@
-                <button type="button" class="btn btn-primary" onClick="InsertUpdate(0);">Create New Employee</button>
-            </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="box-tools">
+            <button type="button" class="btn btn-primary" onClick="InsertUpdate(0);">Create New Employee</button>
+        </div>
         <table id="employees" class="table table-bordered table-hover">
             <thead>
                 <tr>
@@ -79,32 +63,59 @@
                         </td>
                         <td>
                             <button type="button" class="btn btn-success btn-xs" onClick="InsertUpdate(@item.Id);">Edit</button>
-
-                            @Ajax.ActionLink("Delete", "Delete", "Home", new { id = item.Id },
-                              new AjaxOptions { InsertionMode = InsertionMode.Replace, HttpMethod = "GET",
-                              OnBegin = "return confirm('Are you sure you want delete this record?');", OnSuccess = "BindGridView()" })
+                            <button data-id="@item.Id" class="btn btn-danger btn-xs js-delete">Delete</button>
                         </td>
                     </tr>
 
                 }
             </tbody>
         </table>
-    @*</div>
-</div>*@
+    </div>
+</div>
 
 @section scripts
 {
-    <script type="text/javascript">
-        function InsertUpdate(Id) {
-            $('#myModalGood').modal({ backdrop: 'static', keyboard: false });
-            var id = parseInt(Id);
-            var url = '/Home/LoadInsertUpdate'
-            $("#divShowEmployee").load(url, { Id: id }, function () {
+<script type="text/javascript">    
 
+    $(document).ready(function () {
+        $('#employees').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "pageLength": 10
+        });
 
-            });
-        }
-    </script>
+        $("#employees .js-delete").on("click", function (e) {
+            var button = $(this);
+            if(confirm("Are you sure want to delete?")) {
+                $.ajax({
+                    url: "/Home/Delete",
+                    data: JSON.stringify({ Id: $(this).attr("data-id") }),
+                    async: false,
+                    type: "POST",
+                    contentType:"application/json",
+                    success: function () {
+                        button.parents("tr").remove();
+                    },
+                    error: function () {
+                        console.log("error");
+                    }
+                });
+            }            
+        });
+    });
+
+    function InsertUpdate(Id) {
+        $('#myModalGood').modal({ backdrop: 'static', keyboard: false });
+        var id = parseInt(Id);
+        var url = '/Home/LoadInsertUpdate'
+        $("#divShowEmployee").load(url, { Id: id }, function () {
+        });
+    }
+</script>
 }
 
 <div class="modal fade" id="myModalGood" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

@@ -22,6 +22,5 @@ namespace EMP.BusinessUtil
             var list = unitOfWork.Repository.GetAll().ToList();
             return list;
         }
-
     }
 }
