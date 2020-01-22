@@ -23,9 +23,7 @@ namespace EmployeeManagement
                         "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
-
-           
+                        "~/Scripts/modernizr-*"));           
         }
     }
 }

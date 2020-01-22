@@ -34,6 +34,16 @@ namespace EmployeeManagement.Controllers
             return View(list);
         }
 
+        public ActionResult About()
+        {
+            return View();
+        }
+
+        public ActionResult Contact()
+        {
+            return View();
+        }
+
         [HttpPost]
         public ActionResult InsertUpdate(Employee employee)
         {
